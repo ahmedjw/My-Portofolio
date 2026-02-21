@@ -1,0 +1,285 @@
+---
+import Button from '../ui/Button.astro';
+import SocialLinks from '../ui/SocialLinks.astro';
+import GradientBlob from '../effects/GradientBlob.astro';
+import LottieAnimation from '../effects/LottieAnimation.astro';
+import { profile } from '../../data/profile';
+---
+
+<section class="hero" id="hero">
+  <div class="palestine-flag" aria-hidden="true">
+    <LottieAnimation src="/animations/palestine-flag-wave.json" />
+  </div>
+  <GradientBlob size="500px" color="rgba(92, 124, 250, 0.12)" top="-10%" right="-5%" delay="0s" />
+  <GradientBlob size="400px" color="rgba(132, 94, 247, 0.1)" bottom="10%" left="-8%" delay="-7s" />
+
+  <div class="container hero-split">
+    <div class="hero-content hero-stagger">
+      <span class="greeting">Hello, I'm</span>
+      <h1>
+        <span class="gradient-text animated-gradient">{profile.name}</span>
+      </h1>
+      <p class="title">
+        <span class="typewriter" data-text={profile.title}></span>
+      </p>
+      <p class="bio">{profile.bio}</p>
+      <div class="cta-group">
+        <Button href="#projects" variant="primary" size="lg">View My Work</Button>
+        <Button href="#contact" variant="secondary" size="lg">Get In Touch</Button>
+      </div>
+      <SocialLinks />
+    </div>
+
+    <div class="hero-lottie">
+      <LottieAnimation src="/animations/coding-boy.json" />
+    </div>
+  </div>
+
+  <div class="scroll-indicator" aria-hidden="true">
+    <div class="mouse">
+      <div class="wheel"></div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .palestine-flag {
+    position: absolute;
+    top: 80px;
+    right: 16px;
+    width: 70px;
+    height: 70px;
+    z-index: 2;
+    pointer-events: none;
+    filter: drop-shadow(0 2px 8px rgba(0,0,0,0.12));
+  }
+
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    background: var(--gradient-hero);
+    padding: var(--space-32) 0 var(--space-16);
+  }
+
+  .hero-split {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: var(--space-12);
+  }
+
+  .hero-content {
+    flex: 1;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .hero-lottie {
+    flex-shrink: 0;
+    width: 440px;
+    height: 440px;
+    opacity: 0;
+    animation: fadeInRight 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.5s forwards;
+    filter: drop-shadow(0 10px 30px rgba(92, 124, 250, 0.12));
+  }
+
+  .greeting {
+    font-size: var(--text-lg);
+    font-weight: 500;
+    color: var(--color-primary-600);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-bottom: var(--space-4);
+  }
+
+  h1 {
+    font-size: var(--text-6xl);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: var(--leading-tight);
+    margin-bottom: var(--space-4);
+  }
+
+  .animated-gradient {
+    background-size: 200% auto;
+    animation: gradientShift 4s ease infinite;
+  }
+
+  .title {
+    font-size: var(--text-2xl);
+    font-weight: 500;
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-6);
+    min-height: 1.5em;
+  }
+
+  .typewriter::after {
+    content: '|';
+    animation: blink 0.7s step-end infinite;
+    color: var(--color-primary-500);
+    font-weight: 300;
+    margin-left: 2px;
+  }
+
+  .typewriter.done::after {
+    display: none;
+  }
+
+  .bio {
+    font-size: var(--text-lg);
+    color: var(--color-text-secondary);
+    max-width: 520px;
+    line-height: var(--leading-relaxed);
+    margin-bottom: var(--space-10);
+  }
+
+  .cta-group {
+    display: flex;
+    gap: var(--space-4);
+    margin-bottom: var(--space-10);
+    flex-wrap: wrap;
+  }
+
+  /* Scroll indicator */
+  .scroll-indicator {
+    position: absolute;
+    bottom: var(--space-8);
+    left: 50%;
+    transform: translateX(-50%);
+    animation: fadeInUp 1s ease forwards;
+    animation-delay: 1.2s;
+    opacity: 0;
+  }
+
+  .mouse {
+    width: 26px;
+    height: 40px;
+    border: 2px solid var(--color-primary-300);
+    border-radius: 13px;
+    display: flex;
+    justify-content: center;
+    padding-top: 8px;
+  }
+
+  .wheel {
+    width: 3px;
+    height: 8px;
+    background: var(--color-primary-400);
+    border-radius: 2px;
+    animation: scrollWheel 1.5s ease-in-out infinite;
+  }
+
+  @keyframes scrollWheel {
+    0% { opacity: 1; transform: translateY(0); }
+    100% { opacity: 0; transform: translateY(10px); }
+  }
+
+  @media (max-width: 960px) {
+    .hero-split {
+      flex-direction: column;
+      text-align: center;
+    }
+    .hero-content {
+      text-align: center;
+      align-items: center;
+      order: 2;
+    }
+    .hero-lottie {
+      order: 1;
+      width: 300px;
+      height: 300px;
+    }
+    .cta-group {
+      justify-content: center;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .palestine-flag {
+      width: 50px;
+      height: 50px;
+      top: 72px;
+      right: 8px;
+    }
+    h1 {
+      font-size: var(--text-4xl);
+    }
+    .title {
+      font-size: var(--text-xl);
+    }
+    .bio {
+      font-size: var(--text-base);
+    }
+    .hero {
+      padding-top: var(--space-24);
+    }
+    .hero-lottie {
+      width: 250px;
+      height: 250px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    h1 {
+      font-size: var(--text-3xl);
+    }
+    .hero-lottie {
+      width: 220px;
+      height: 220px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .animated-gradient {
+      animation: none;
+    }
+    .typewriter::after {
+      display: none;
+    }
+    .hero-lottie {
+      opacity: 1;
+      animation: none;
+    }
+  }
+</style>
+
+<script>
+  function initTypewriter() {
+    const el = document.querySelector('.typewriter') as HTMLElement;
+    if (!el) return;
+
+    const text = el.dataset.text || '';
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      el.textContent = text;
+      el.classList.add('done');
+      return;
+    }
+
+    el.textContent = '';
+    let i = 0;
+
+    setTimeout(() => {
+      function type() {
+        if (i < text.length) {
+          el.textContent = text.slice(0, i + 1);
+          i++;
+          setTimeout(type, 60 + Math.random() * 40);
+        } else {
+          setTimeout(() => el.classList.add('done'), 1500);
+        }
+      }
+      type();
+    }, 500);
+  }
+
+  initTypewriter();
+  document.addEventListener('astro:page-load', initTypewriter);
+</script>

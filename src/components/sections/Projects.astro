@@ -1,0 +1,44 @@
+---
+import ScrollReveal from '../effects/ScrollReveal.astro';
+import SectionHeading from '../ui/SectionHeading.astro';
+import ProjectCard from '../ui/ProjectCard.astro';
+import { projects } from '../../data/projects';
+---
+
+<section class="section" id="projects">
+  <div class="container">
+    <ScrollReveal>
+      <SectionHeading title="Projects" subtitle="Some of the things I've built" />
+    </ScrollReveal>
+
+    <div class="projects-grid">
+      {projects.map((project, i) => (
+        <ScrollReveal delay={i * 100}>
+          <ProjectCard
+            title={project.title}
+            description={project.description}
+            technologies={project.technologies}
+            githubUrl={project.githubUrl}
+            liveUrl={project.liveUrl}
+          />
+        </ScrollReveal>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-6);
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  @media (max-width: 768px) {
+    .projects-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

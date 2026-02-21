@@ -1,0 +1,65 @@
+---
+import { getCollection } from 'astro:content';
+import ScrollReveal from '../effects/ScrollReveal.astro';
+import SectionHeading from '../ui/SectionHeading.astro';
+import BlogCard from '../ui/BlogCard.astro';
+import Button from '../ui/Button.astro';
+
+const posts = (await getCollection('blog'))
+  .filter((post) => !post.data.draft)
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 3);
+---
+
+<section class="section" id="blog">
+  <div class="container">
+    <ScrollReveal>
+      <SectionHeading title="Blog" subtitle="Thoughts, learnings, and tutorials" />
+    </ScrollReveal>
+
+    <div class="blog-grid">
+      {posts.map((post, i) => (
+        <ScrollReveal delay={i * 100}>
+          <BlogCard
+            title={post.data.title}
+            description={post.data.description}
+            pubDate={post.data.pubDate}
+            tags={post.data.tags}
+            slug={post.id}
+          />
+        </ScrollReveal>
+      ))}
+    </div>
+
+    <ScrollReveal delay={400}>
+      <div class="view-all">
+        <Button href="/blog/" variant="secondary">View All Posts</Button>
+      </div>
+    </ScrollReveal>
+  </div>
+</section>
+
+<style>
+  .blog-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-6);
+    margin-bottom: var(--space-10);
+  }
+
+  .view-all {
+    text-align: center;
+  }
+
+  @media (max-width: 1024px) {
+    .blog-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .blog-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

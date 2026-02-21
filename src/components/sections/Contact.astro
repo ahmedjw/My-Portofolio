@@ -1,0 +1,114 @@
+---
+import ScrollReveal from '../effects/ScrollReveal.astro';
+import Button from '../ui/Button.astro';
+import SocialLinks from '../ui/SocialLinks.astro';
+import GradientBlob from '../effects/GradientBlob.astro';
+import LottieAnimation from '../effects/LottieAnimation.astro';
+import { profile } from '../../data/profile';
+---
+
+<section class="section contact" id="contact">
+  <div class="contact-palestine" aria-hidden="true">
+    <LottieAnimation src="/animations/palestine-free.json" />
+  </div>
+  <GradientBlob size="350px" color="rgba(92, 124, 250, 0.1)" top="10%" left="-5%" delay="-3s" />
+  <GradientBlob size="300px" color="rgba(132, 94, 247, 0.08)" bottom="10%" right="-5%" delay="-10s" />
+
+  <div class="container">
+    <ScrollReveal>
+      <div class="contact-content">
+        <h2>Let's Work Together</h2>
+        <div class="heading-line"></div>
+        <p>
+          I'm always interested in hearing about new opportunities, projects, and collaborations.
+          Whether you have a question or just want to say hi, feel free to reach out!
+        </p>
+        <div class="contact-actions">
+          <Button href={`mailto:${profile.email}`} variant="primary" size="lg">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            Say Hello
+          </Button>
+        </div>
+        <div class="social-wrapper">
+          <SocialLinks />
+        </div>
+      </div>
+    </ScrollReveal>
+  </div>
+</section>
+
+<style>
+  .contact {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .contact-palestine {
+    position: absolute;
+    width: 420px;
+    height: 420px;
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
+    opacity: 0.3;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  @media (max-width: 768px) {
+    .contact-palestine {
+      width: 280px;
+      height: 280px;
+    }
+  }
+
+  .contact :global(.container) {
+    position: relative;
+    z-index: 2;
+  }
+
+  .contact-content {
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+  }
+
+  h2 {
+    font-size: var(--text-4xl);
+    font-weight: 800;
+    color: var(--color-text);
+    letter-spacing: -0.02em;
+  }
+
+  .heading-line {
+    width: 60px;
+    height: 4px;
+    background: var(--gradient-primary);
+    border-radius: var(--radius-full);
+    margin: var(--space-4) auto var(--space-6);
+  }
+
+  p {
+    font-size: var(--text-lg);
+    color: var(--color-text-secondary);
+    line-height: var(--leading-relaxed);
+    margin-bottom: var(--space-10);
+  }
+
+  .contact-actions {
+    margin-bottom: var(--space-8);
+  }
+
+  .social-wrapper {
+    display: flex;
+    justify-content: center;
+  }
+
+  @media (max-width: 768px) {
+    h2 {
+      font-size: var(--text-3xl);
+    }
+  }
+</style>

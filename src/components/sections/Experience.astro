@@ -1,0 +1,60 @@
+---
+import ScrollReveal from '../effects/ScrollReveal.astro';
+import SectionHeading from '../ui/SectionHeading.astro';
+import TimelineItem from '../ui/TimelineItem.astro';
+import { experience } from '../../data/experience';
+---
+
+<section class="section" id="experience">
+  <div class="container container--narrow">
+    <ScrollReveal>
+      <SectionHeading title="Experience" subtitle="My professional journey so far" />
+    </ScrollReveal>
+
+    <div class="timeline">
+      {experience.map((item, i) => (
+        <ScrollReveal direction="left" delay={i * 100}>
+          <TimelineItem
+            role={item.role}
+            company={item.company}
+            period={item.period}
+            description={item.description}
+            highlights={item.highlights}
+            technologies={item.technologies}
+          />
+        </ScrollReveal>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .timeline {
+    position: relative;
+  }
+</style>
+
+<script>
+  function initTimeline() {
+    const items = document.querySelectorAll('.timeline-item');
+    if (!items.length) return;
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      items.forEach((item) => item.classList.add('timeline-visible'));
+      return;
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        observer.unobserve(entry.target);
+        entry.target.classList.add('timeline-visible');
+      });
+    }, { threshold: 0.2 });
+
+    items.forEach((item) => observer.observe(item));
+  }
+
+  initTimeline();
+  document.addEventListener('astro:page-load', initTimeline);
+</script>

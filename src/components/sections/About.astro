@@ -1,0 +1,228 @@
+---
+import ScrollReveal from '../effects/ScrollReveal.astro';
+import SectionHeading from '../ui/SectionHeading.astro';
+import GlassCard from '../ui/GlassCard.astro';
+import LottieAnimation from '../effects/LottieAnimation.astro';
+---
+
+<section class="section" id="about">
+  <div class="container">
+    <ScrollReveal>
+      <SectionHeading title="About Me" subtitle="A little bit about myself and what I do" />
+    </ScrollReveal>
+
+    <div class="about-grid">
+      <ScrollReveal direction="left" delay={100}>
+        <div class="about-image">
+            <div class="wave-bg" aria-hidden="true">
+              <LottieAnimation src="/animations/wave.json" />
+            </div>
+            <div class="image-wrapper">
+            <img
+              src="/images/profile.jpg"
+              alt="Ahmed Abu Jwifel"
+              class="image-placeholder"
+              width="280"
+              height="280"
+            />
+            </div>
+        </div>
+      </ScrollReveal>
+
+      <ScrollReveal direction="right" delay={200}>
+        <div class="about-text">
+          <p>
+            I'm a <strong>Software Engineer</strong> based in Gaza, Palestine, with a B.S. in Software Engineering
+            from Al Azhar University. I specialize in
+            <strong>front-end and full-stack development</strong> with a focus on React, Next.js, and Node.js.
+          </p>
+          <p>
+            I've worked with companies across the US, Canada, and Europe, building everything from
+            <strong>Electron desktop apps</strong> and <strong>React Native mobile apps</strong> to
+            full-stack web platforms with Stripe payments and real-time Firebase sync.
+          </p>
+          <p>
+            I care deeply about code quality, collaboration, and delivering real value through
+            technology. I thrive in Agile environments and enjoy tackling challenges in
+            scalable architecture and user-focused development.
+          </p>
+
+          <div class="stats-grid">
+            <GlassCard hover>
+              <div class="stat">
+                <span class="stat-number gradient-text" data-target="4" data-suffix="+">4+</span>
+                <span class="stat-label">Years Experience</span>
+              </div>
+            </GlassCard>
+            <GlassCard hover>
+              <div class="stat">
+                <span class="stat-number gradient-text" data-target="20" data-suffix="+">20+</span>
+                <span class="stat-label">Technologies</span>
+              </div>
+            </GlassCard>
+            <GlassCard hover>
+              <div class="stat">
+                <span class="stat-number gradient-text" data-target="10" data-suffix="+">10+</span>
+                <span class="stat-label">Projects</span>
+              </div>
+            </GlassCard>
+          </div>
+        </div>
+      </ScrollReveal>
+    </div>
+  </div>
+</section>
+
+<style>
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: var(--space-16);
+    align-items: center;
+  }
+
+  .about-image {
+    display: flex;
+    justify-content: center;
+    position: relative;
+  }
+
+  .wave-bg {
+    position: absolute;
+    width: 420px;
+    height: 420px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0.18;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .image-wrapper {
+    position: relative;
+    z-index: 1;
+    width: 280px;
+    height: 280px;
+    border-radius: var(--radius-xl);
+    padding: 4px;
+    background: var(--gradient-primary);
+  }
+
+  .image-placeholder {
+    width: 100%;
+    height: 100%;
+    border-radius: calc(var(--radius-xl) - 2px);
+    background: var(--color-primary-50);
+    object-fit: cover;
+  }
+
+  .about-text p {
+    font-size: var(--text-lg);
+    color: var(--color-text-secondary);
+    line-height: var(--leading-relaxed);
+    margin-bottom: var(--space-6);
+  }
+
+  .about-text strong {
+    color: var(--color-text);
+    font-weight: 600;
+  }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-4);
+    margin-top: var(--space-8);
+  }
+
+  .stat {
+    text-align: center;
+    padding: var(--space-2) 0;
+  }
+
+  .stat-number {
+    display: block;
+    font-size: var(--text-3xl);
+    font-weight: 800;
+  }
+
+  .stat-label {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    font-weight: 500;
+  }
+
+  @media (max-width: 768px) {
+    .about-grid {
+      grid-template-columns: 1fr;
+      gap: var(--space-10);
+    }
+
+    .image-wrapper {
+      width: 220px;
+      height: 220px;
+    }
+
+    .wave-bg {
+      width: 340px;
+      height: 340px;
+    }
+
+    .stats-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  @media (max-width: 480px) {
+    .stats-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<script>
+  function initCounters() {
+    const counters = document.querySelectorAll('.stat-number[data-target]');
+    if (!counters.length) return;
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    counters.forEach((el) => {
+      const suffix = (el as HTMLElement).dataset.suffix || '';
+      el.textContent = '0' + suffix;
+    });
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        observer.unobserve(entry.target);
+
+        const el = entry.target as HTMLElement;
+        const target = parseInt(el.dataset.target || '0', 10);
+        const suffix = el.dataset.suffix || '';
+        const duration = 1500;
+        const start = performance.now();
+
+        function easeOutCubic(t: number) {
+          return 1 - Math.pow(1 - t, 3);
+        }
+
+        function update(now: number) {
+          const elapsed = now - start;
+          const progress = Math.min(elapsed / duration, 1);
+          const value = Math.round(easeOutCubic(progress) * target);
+          el.textContent = value + suffix;
+          if (progress < 1) requestAnimationFrame(update);
+        }
+
+        requestAnimationFrame(update);
+      });
+    }, { threshold: 0.5 });
+
+    counters.forEach((el) => observer.observe(el));
+  }
+
+  initCounters();
+  document.addEventListener('astro:page-load', initCounters);
+</script>
