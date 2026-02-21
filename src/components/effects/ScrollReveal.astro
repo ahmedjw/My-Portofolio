@@ -1,0 +1,47 @@
+---
+interface Props {
+  direction?: 'up' | 'down' | 'left' | 'right';
+  delay?: number;
+  duration?: number;
+  class?: string;
+}
+
+const { direction = 'up', delay = 0, duration = 600, class: className = '' } = Astro.props;
+---
+
+<div
+  class:list={['scroll-reveal', className]}
+  data-direction={direction}
+  data-delay={delay}
+  data-duration={duration}
+>
+  <slot />
+</div>
+
+<script>
+  function initScrollReveal() {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const el = entry.target as HTMLElement;
+            const delay = parseInt(el.dataset.delay || '0', 10);
+            const duration = parseInt(el.dataset.duration || '600', 10);
+            el.style.transitionDuration = `${duration}ms`;
+            el.style.transitionDelay = `${delay}ms`;
+            el.classList.add('revealed');
+            observer.unobserve(el);
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    document.querySelectorAll('.scroll-reveal:not(.revealed)').forEach((el) => {
+      observer.observe(el);
+    });
+  }
+
+  initScrollReveal();
+  document.addEventListener('astro:page-load', initScrollReveal);
+</script>

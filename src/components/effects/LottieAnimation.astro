@@ -1,0 +1,58 @@
+---
+interface Props {
+  src: string;
+  class?: string;
+  loop?: boolean;
+  autoplay?: boolean;
+}
+
+const {
+  src,
+  class: className = '',
+  loop = true,
+  autoplay = true,
+} = Astro.props;
+---
+
+<div
+  class:list={['lottie-container', className]}
+  data-lottie-src={src}
+  data-lottie-loop={String(loop)}
+  data-lottie-autoplay={String(autoplay)}
+>
+</div>
+
+<style>
+  .lottie-container {
+    width: 100%;
+    height: 100%;
+  }
+</style>
+
+<script>
+  import lottie from 'lottie-web';
+
+  function initLottie() {
+    const containers = document.querySelectorAll<HTMLElement>('[data-lottie-src]');
+
+    containers.forEach((container) => {
+      if (container.dataset.lottieInit) return;
+      container.dataset.lottieInit = 'true';
+
+      const src = container.dataset.lottieSrc!;
+      const loop = container.dataset.lottieLoop !== 'false';
+      const autoplay = container.dataset.lottieAutoplay !== 'false';
+
+      lottie.loadAnimation({
+        container,
+        renderer: 'svg',
+        loop,
+        autoplay,
+        path: src,
+      });
+    });
+  }
+
+  initLottie();
+  document.addEventListener('astro:page-load', initLottie);
+</script>

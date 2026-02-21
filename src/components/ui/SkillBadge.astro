@@ -1,0 +1,54 @@
+---
+interface Props {
+  name: string;
+  category: string;
+  index?: number;
+}
+
+const { name, category, index = 0 } = Astro.props;
+---
+
+<div
+  class="skill-badge"
+  data-category={category}
+  style={`animation-delay: ${index * 50}ms`}
+>
+  <span class="skill-name">{name}</span>
+</div>
+
+<style>
+  .skill-badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    padding: var(--space-3) var(--space-5);
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+    transition: all 0.3s ease;
+    cursor: default;
+    opacity: 0;
+    transform: scale(0.8);
+  }
+
+  .skill-badge.popped-in {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  .skill-badge:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-accent);
+    border-color: var(--color-primary-200);
+  }
+
+  .skill-name {
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--color-text);
+  }
+</style>

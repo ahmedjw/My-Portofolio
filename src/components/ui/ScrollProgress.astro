@@ -1,0 +1,49 @@
+---
+
+---
+
+<div class="scroll-progress" aria-hidden="true"></div>
+
+<style>
+  .scroll-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    background: var(--gradient-primary);
+    width: 0%;
+    z-index: 1001;
+    transition: none;
+  }
+
+  @supports (animation-timeline: scroll()) {
+    .scroll-progress {
+      animation: growProgress linear;
+      animation-timeline: scroll();
+    }
+
+    @keyframes growProgress {
+      to { width: 100%; }
+    }
+  }
+</style>
+
+<script>
+  function initProgress() {
+    const bar = document.querySelector('.scroll-progress') as HTMLElement;
+    if (!bar || CSS.supports('animation-timeline', 'scroll()')) return;
+
+    function updateProgress() {
+      const scrollTop = document.documentElement.scrollTop;
+      const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const progress = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
+      bar.style.width = `${progress}%`;
+    }
+
+    window.addEventListener('scroll', updateProgress, { passive: true });
+    updateProgress();
+  }
+
+  initProgress();
+  document.addEventListener('astro:page-load', initProgress);
+</script>

@@ -1,0 +1,39 @@
+---
+interface Props {
+  size?: string;
+  color?: string;
+  top?: string;
+  left?: string;
+  right?: string;
+  bottom?: string;
+  delay?: string;
+}
+
+const { size = '400px', color = 'rgba(92, 124, 250, 0.15)', top, left, right, bottom, delay = '0s' } = Astro.props;
+---
+
+<div
+  class="gradient-blob"
+  style={`
+    width: ${size};
+    height: ${size};
+    background: ${color};
+    ${top ? `top: ${top};` : ''}
+    ${left ? `left: ${left};` : ''}
+    ${right ? `right: ${right};` : ''}
+    ${bottom ? `bottom: ${bottom};` : ''}
+    animation-delay: ${delay};
+  `}
+  aria-hidden="true"
+></div>
+
+<style>
+  .gradient-blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    animation: float 20s ease-in-out infinite;
+    pointer-events: none;
+    z-index: 0;
+  }
+</style>
