@@ -1,0 +1,54 @@
+---
+import { ClientRouter } from 'astro:transitions';
+import Header from '../components/ui/Header.astro';
+import Footer from '../components/ui/Footer.astro';
+import ScrollProgress from '../components/ui/ScrollProgress.astro';
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = 'Ahmed Abu Jwifel — Software Engineer',
+  description = 'Software Engineer passionate about building clean, scalable, and impactful products with React and Node.js.',
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <meta name="generator" content={Astro.generator} />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+
+    <title>{title}</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <ClientRouter />
+  </head>
+  <body>
+    <a href="#main-content" class="sr-only">Skip to content</a>
+
+    <ScrollProgress />
+    <Header />
+    <main id="main-content">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>
+
