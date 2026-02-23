@@ -1,0 +1,315 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Button from '../components/ui/Button.astro';
+import ScrollReveal from '../components/effects/ScrollReveal.astro';
+
+interface Props {
+  frontmatter: {
+    title: string;
+    description: string;
+    technologies: string[];
+    role: string;
+    status: 'completed' | 'in-progress' | 'maintained';
+    startDate: string;
+    endDate?: string;
+    githubUrl?: string;
+    liveUrl?: string;
+  };
+  slug: string;
+}
+
+const { frontmatter, slug } = Astro.props;
+
+const statusLabels: Record<string, string> = {
+  completed: 'Completed',
+  'in-progress': 'In Progress',
+  maintained: 'Maintained',
+};
+
+const dateRange = frontmatter.endDate
+  ? `${frontmatter.startDate} — ${frontmatter.endDate}`
+  : frontmatter.startDate;
+---
+
+<BaseLayout title={`${frontmatter.title} — Ahmed Abu Jwifel`} description={frontmatter.description}>
+  <article class="project-detail">
+    <div class="container container--narrow">
+      <a href="/#projects" class="back-link">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+        Back to projects
+      </a>
+
+      <ScrollReveal>
+        <header class="project-header">
+          <div class="project-meta">
+            <span class:list={['status-badge', `status--${frontmatter.status}`]}>
+              {statusLabels[frontmatter.status]}
+            </span>
+            <span class="date-range">{dateRange}</span>
+            <span class="role">{frontmatter.role}</span>
+          </div>
+
+          <h1 transition:name={`project-title-${slug}`}>{frontmatter.title}</h1>
+          <p class="project-description">{frontmatter.description}</p>
+
+          <div class="tech-tags">
+            {frontmatter.technologies.map((tech) => <span class="tag">{tech}</span>)}
+          </div>
+
+          {(frontmatter.githubUrl || frontmatter.liveUrl) && (
+            <div class="action-buttons">
+              {frontmatter.githubUrl && (
+                <Button href={frontmatter.githubUrl} variant="secondary" size="sm">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+                  View Source
+                </Button>
+              )}
+              {frontmatter.liveUrl && (
+                <Button href={frontmatter.liveUrl} variant="primary" size="sm">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                  Live Site
+                </Button>
+              )}
+            </div>
+          )}
+        </header>
+      </ScrollReveal>
+
+      <ScrollReveal>
+        <div class="prose">
+          <slot />
+        </div>
+      </ScrollReveal>
+
+      <footer class="project-footer">
+        <a href="/#projects" class="back-link">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+          Back to projects
+        </a>
+      </footer>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .project-detail {
+    padding: var(--space-32) 0 var(--space-24);
+  }
+
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--color-primary-600);
+    transition: gap 0.2s ease;
+    margin-bottom: var(--space-8);
+  }
+
+  .back-link:hover {
+    gap: var(--space-3);
+  }
+
+  .project-header {
+    margin-bottom: var(--space-12);
+  }
+
+  .project-meta {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    margin-bottom: var(--space-6);
+    flex-wrap: wrap;
+  }
+
+  .status-badge {
+    font-size: var(--text-xs);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: var(--space-1) var(--space-3);
+    border-radius: var(--radius-full);
+  }
+
+  .status--completed {
+    color: #16a34a;
+    background: rgba(22, 163, 74, 0.1);
+  }
+
+  .status--in-progress {
+    color: #d97706;
+    background: rgba(217, 119, 6, 0.1);
+  }
+
+  .status--maintained {
+    color: var(--color-primary-600);
+    background: var(--color-primary-50);
+  }
+
+  .date-range,
+  .role {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+  }
+
+  .role::before {
+    content: '·';
+    margin-right: var(--space-4);
+  }
+
+  h1 {
+    font-size: var(--text-5xl);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: var(--leading-tight);
+    color: var(--color-text);
+    margin-bottom: var(--space-4);
+  }
+
+  .project-description {
+    font-size: var(--text-xl);
+    color: var(--color-text-secondary);
+    line-height: var(--leading-relaxed);
+    margin-bottom: var(--space-6);
+  }
+
+  .tech-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin-bottom: var(--space-6);
+  }
+
+  .tag {
+    font-size: var(--text-xs);
+    font-weight: 600;
+    color: var(--color-primary-600);
+    background: var(--color-primary-50);
+    padding: 2px var(--space-3);
+    border-radius: var(--radius-full);
+  }
+
+  .action-buttons {
+    display: flex;
+    gap: var(--space-3);
+  }
+
+  /* Prose styles for markdown content */
+  .prose :global(h2) {
+    font-size: var(--text-2xl);
+    font-weight: 700;
+    margin-top: var(--space-12);
+    margin-bottom: var(--space-4);
+    color: var(--color-text);
+  }
+
+  .prose :global(h3) {
+    font-size: var(--text-xl);
+    font-weight: 700;
+    margin-top: var(--space-8);
+    margin-bottom: var(--space-3);
+    color: var(--color-text);
+  }
+
+  .prose :global(p) {
+    margin-bottom: var(--space-6);
+    line-height: var(--leading-relaxed);
+    color: var(--color-text-secondary);
+  }
+
+  .prose :global(ul),
+  .prose :global(ol) {
+    margin-bottom: var(--space-6);
+    padding-left: var(--space-6);
+  }
+
+  .prose :global(ul) {
+    list-style: disc;
+  }
+
+  .prose :global(ol) {
+    list-style: decimal;
+  }
+
+  .prose :global(li) {
+    margin-bottom: var(--space-2);
+    line-height: var(--leading-relaxed);
+    color: var(--color-text-secondary);
+  }
+
+  .prose :global(strong) {
+    font-weight: 600;
+    color: var(--color-text);
+  }
+
+  .prose :global(code) {
+    font-family: var(--font-mono);
+    background: var(--color-primary-50);
+    padding: 0.15em 0.4em;
+    border-radius: 4px;
+    font-size: 0.9em;
+  }
+
+  .prose :global(pre) {
+    background: #1e1e2e;
+    color: #cdd6f4;
+    padding: var(--space-6);
+    border-radius: var(--radius-md);
+    overflow-x: auto;
+    margin-bottom: var(--space-6);
+    font-size: var(--text-sm);
+    line-height: 1.7;
+  }
+
+  .prose :global(pre code) {
+    background: none;
+    padding: 0;
+    font-size: inherit;
+    color: inherit;
+  }
+
+  .prose :global(a) {
+    color: var(--color-primary-600);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    transition: color 0.2s ease;
+  }
+
+  .prose :global(a:hover) {
+    color: var(--color-primary-800);
+  }
+
+  .prose :global(blockquote) {
+    border-left: 4px solid var(--color-primary-300);
+    padding-left: var(--space-6);
+    margin: var(--space-8) 0;
+    color: var(--color-text-secondary);
+    font-style: italic;
+  }
+
+  .prose :global(hr) {
+    border: none;
+    height: 1px;
+    background: var(--color-border);
+    margin: var(--space-12) 0;
+  }
+
+  .project-footer {
+    margin-top: var(--space-16);
+    padding-top: var(--space-8);
+    border-top: 1px solid var(--color-border);
+  }
+
+  @media (max-width: 768px) {
+    h1 {
+      font-size: var(--text-3xl);
+    }
+    .project-description {
+      font-size: var(--text-lg);
+    }
+    .project-detail {
+      padding-top: var(--space-24);
+    }
+  }
+</style>
